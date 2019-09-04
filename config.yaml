@@ -1,0 +1,27 @@
+---
+- hosts: nodes
+  tasks:
+
+  - name: copy patched openshift-node
+    copy:
+      src: openshift-node-patched
+      dest: /usr/local/bin/
+      mode: 0755
+
+  - name: ensure override path exists
+    file:
+      path: /etc/systemd/system/atomic-openshift-node.service.d/
+      state: directory
+
+  - name: copy override.conf
+    copy:
+      src: override.conf
+      dest: /etc/systemd/system/atomic-openshift-node.service.d/ 
+
+  - name: restart atomic-openshift-node service
+    systemd:
+      daemon_reload: true
+      name: atomic-openshift-node
+      state: restarted
+#ansible -m shell --args 'echo "KUBELET_FLAGS=--node-ip {{ansible_default_ipv4.address}}">> /etc/sysconfig/atomic-openshift-node'  all
+
