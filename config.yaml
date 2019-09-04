@@ -1,6 +1,13 @@
 ---
 - hosts: nodes
   tasks:
+  - name: set KUBELET_FLAGS
+    lineinfile:
+      state: present
+      backup: yes
+      path: /etc/sysconfig/atomic-openshift-node
+      regexp: '^KUBELET_FLAGS='
+      line: KUBELET_FLAGS=--node-ip {{ansible_default_ipv4.address}}
 
   - name: copy patched openshift-node
     copy:
@@ -23,5 +30,4 @@
       daemon_reload: true
       name: atomic-openshift-node
       state: restarted
-#ansible -m shell --args 'echo "KUBELET_FLAGS=--node-ip {{ansible_default_ipv4.address}}">> /etc/sysconfig/atomic-openshift-node'  all
 
