@@ -7,7 +7,7 @@
       backup: yes
       path: /etc/sysconfig/atomic-openshift-node
       regexp: '^KUBELET_FLAGS='
-      line: KUBELET_FLAGS=--node-ip {{ansible_default_ipv4.address}}
+      line: KUBELET_FLAGS="--node-ip {{ansible_default_ipv4.address}}"
 
   - name: copy patched openshift-node
     copy:
